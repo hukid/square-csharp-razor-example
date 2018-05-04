@@ -1,0 +1,35 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Items";
+}
+<h1 class="text-danger">Your Items to Check out</h1>
+
+<table class="table">
+    <thead>
+        <td>Name</td>
+        <td>Price</td>
+        <td>Action</td>     
+    </thead>
+
+@{
+    if(@Model.IsSandbox) {
+        var checkoutLink = "/Checkout";
+        <tr>
+            <td>SandboxDummyItem</td>
+            <td>@Model.FormatMoney(1099)</td>
+            <td><a href=@checkoutLink class="btn btn-info btn-sm">Buy</a></td>
+        </tr>
+        
+    } else {
+        foreach(var item in @Model.Items){
+            var checkoutLink = "/Checkout/?itemVarId=" + @item.ItemData.Variations[0].Id;
+            <tr>
+                <td>@item.ItemData.Name</td>
+                <td>@Model.FormatMoney(@item.ItemData.Variations[0].ItemVariationData.PriceMoney.Amount)</td>
+                <td><a href=@checkoutLink class="btn btn-info btn-sm">Buy</a></td>
+            </tr>
+        }
+    }
+}
+</table>
